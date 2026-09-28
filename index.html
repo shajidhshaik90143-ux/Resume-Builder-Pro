@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Resume Builder Pro - create professional resumes with live preview and multiple templates.">
+  <title>Resume Builder Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">RB</span><div><strong>Resume Builder Pro</strong><small>Professional Resume Studio</small></div></div>
+    <div class="top-actions">
+      <button class="ghost-btn" id="newResumeBtn">New</button>
+      <button class="ghost-btn" id="saveBtn">Save</button>
+      <button class="ghost-btn" id="exportBtn">Export JSON</button>
+      <label class="ghost-btn file-btn">Import JSON<input type="file" id="importInput" accept=".json,application/json"></label>
+      <button class="primary-btn" id="printBtn">Print / PDF</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="side-head">
+        <div><h2>Resume editor</h2><p>Build your story section by section.</p></div>
+        <span class="save-dot" id="saveStatus">Saved</span>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-row"><span>Resume completeness</span><strong id="progressText">0%</strong></div>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+
+      <nav class="section-nav">
+        <button class="nav-item active" data-section="personal"><span>01</span> Personal Info</button>
+        <button class="nav-item" data-section="summary"><span>02</span> Professional Summary</button>
+        <button class="nav-item" data-section="experience"><span>03</span> Experience</button>
+        <button class="nav-item" data-section="education"><span>04</span> Education</button>
+        <button class="nav-item" data-section="skills"><span>05</span> Skills</button>
+        <button class="nav-item" data-section="projects"><span>06</span> Projects</button>
+        <button class="nav-item" data-section="certifications"><span>07</span> Certifications</button>
+        <button class="nav-item" data-section="languages"><span>08</span> Languages</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <label class="field-label">Template</label>
+        <div class="template-grid">
+          <button class="template-card active" data-template="modern"><span class="mini modern-mini"></span>Modern</button>
+          <button class="template-card" data-template="classic"><span class="mini classic-mini"></span>Classic</button>
+          <button class="template-card" data-template="minimal"><span class="mini minimal-mini"></span>Minimal</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="editor">
+      <div class="editor-inner">
+        <section class="panel section-panel active" id="panel-personal">
+          <div class="panel-heading"><div><span class="eyebrow">01 / PERSONAL</span><h1>Personal information</h1><p>Make it easy for recruiters to identify and contact you.</p></div></div>
+          <div class="form-grid">
+            <label>Full name<input data-bind="personal.name" placeholder="e.g. Shajidh Shaik"></label>
+            <label>Professional title<input data-bind="personal.title" placeholder="e.g. Software Developer"></label>
+            <label>Email<input data-bind="personal.email" type="email" placeholder="you@example.com"></label>
+            <label>Phone<input data-bind="personal.phone" placeholder="+91 98765 43210"></label>
+            <label>Location<input data-bind="personal.location" placeholder="Ongole, Andhra Pradesh, India"></label>
+            <label>Website / Portfolio<input data-bind="personal.website" placeholder="yourportfolio.dev"></label>
+            <label>LinkedIn<input data-bind="personal.linkedin" placeholder="linkedin.com/in/yourname"></label>
+            <label>GitHub<input data-bind="personal.github" placeholder="github.com/yourname"></label>
+          </div>
+        </section>
+
+        <section class="panel section-panel" id="panel-summary">
+          <div class="panel-heading"><div><span class="eyebrow">02 / SUMMARY</span><h1>Professional summary</h1><p>Write a focused 3–5 line overview of your strengths and goals.</p></div></div>
+          <label class="full-label">Summary<textarea data-bind="summary" rows="8" placeholder="Results-driven software developer with experience building responsive applications..."></textarea></label>
+          <div class="tip">Tip: mention your role, strongest skills, relevant experience, and the value you create.</div>
+        </section>
+
+        <section class="panel section-panel" id="panel-experience">
+          <div class="panel-heading"><div><span class="eyebrow">03 / EXPERIENCE</span><h1>Work experience</h1><p>Highlight achievements, not just responsibilities.</p></div><button class="add-btn" data-add="experience">+ Add experience</button></div>
+          <div id="experienceList"></div>
+        </section>
+
+        <section class="panel section-panel" id="panel-education">
+          <div class="panel-heading"><div><span class="eyebrow">04 / EDUCATION</span><h1>Education</h1><p>Add degrees, diplomas, and relevant academic details.</p></div><button class="add-btn" data-add="education">+ Add education</button></div>
+          <div id="educationList"></div>
+        </section>
+
+        <section class="panel section-panel" id="panel-skills">
+          <div class="panel-heading"><div><span class="eyebrow">05 / SKILLS</span><h1>Skills</h1><p>Add technical and professional skills. Press Enter after each skill.</p></div></div>
+          <label class="full-label">Skills<input id="skillInput" placeholder="Python, JavaScript, React, SQL, Git..."></label>
+          <div class="chips" id="skillChips"></div>
+        </section>
+
+        <section class="panel section-panel" id="panel-projects">
+          <div class="panel-heading"><div><span class="eyebrow">06 / PROJECTS</span><h1>Projects</h1><p>Showcase projects with outcomes, technologies, and links.</p></div><button class="add-btn" data-add="projects">+ Add project</button></div>
+          <div id="projectsList"></div>
+        </section>
+
+        <section class="panel section-panel" id="panel-certifications">
+          <div class="panel-heading"><div><span class="eyebrow">07 / CERTIFICATIONS</span><h1>Certifications</h1><p>List relevant credentials and completion dates.</p></div><button class="add-btn" data-add="certifications">+ Add certification</button></div>
+          <div id="certificationsList"></div>
+        </section>
+
+        <section class="panel section-panel" id="panel-languages">
+          <div class="panel-heading"><div><span class="eyebrow">08 / LANGUAGES</span><h1>Languages</h1><p>Add languages and proficiency levels.</p></div><button class="add-btn" data-add="languages">+ Add language</button></div>
+          <div id="languagesList"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="preview-wrap">
+      <div class="preview-toolbar"><div><strong>Live preview</strong><span>A4 • Recruiter ready</span></div><button class="zoom-btn" id="zoomBtn">100%</button></div>
+      <div class="paper-stage"><article class="resume-paper template-modern" id="resumePreview"></article></div>
+    </section>
+  </main>
+
+  <template id="experienceTemplate">
+    <div class="repeat-card" data-item>
+      <div class="repeat-head"><strong>Experience</strong><button class="remove-btn" data-remove>Remove</button></div>
+      <div class="form-grid">
+        <label>Job title<input data-field="role" placeholder="Software Developer"></label>
+        <label>Company<input data-field="company" placeholder="Company name"></label>
+        <label>Location<input data-field="location" placeholder="Hyderabad, India"></label>
+        <label>Start date<input data-field="start" placeholder="Jun 2024"></label>
+        <label>End date<input data-field="end" placeholder="Present"></label>
+      </div>
+      <label class="full-label">Achievements / responsibilities<textarea data-field="description" rows="5" placeholder="Built a dashboard used by 500+ users&#10;Improved API response time by 35%"></textarea></label>
+    </div>
+  </template>
+
+  <template id="educationTemplate">
+    <div class="repeat-card" data-item>
+      <div class="repeat-head"><strong>Education</strong><button class="remove-btn" data-remove>Remove</button></div>
+      <div class="form-grid">
+        <label>Degree<input data-field="degree" placeholder="B.Tech Computer Science"></label>
+        <label>Institution<input data-field="school" placeholder="University / College"></label>
+        <label>Location<input data-field="location" placeholder="Ongole, India"></label>
+        <label>Start year<input data-field="start" placeholder="2023"></label>
+        <label>End year<input data-field="end" placeholder="2027"></label>
+        <label>Score<input data-field="score" placeholder="CGPA 8.2 / 10"></label>
+      </div>
+    </div>
+  </template>
+
+  <template id="projectsTemplate">
+    <div class="repeat-card" data-item>
+      <div class="repeat-head"><strong>Project</strong><button class="remove-btn" data-remove>Remove</button></div>
+      <div class="form-grid">
+        <label>Project name<input data-field="name" placeholder="Smart Expense Tracker"></label>
+        <label>Technologies<input data-field="tech" placeholder="Python, Flask, SQLite"></label>
+        <label>Link<input data-field="link" placeholder="github.com/yourname/project"></label>
+      </div>
+      <label class="full-label">Description<textarea data-field="description" rows="4" placeholder="Describe what you built, the problem solved, and measurable impact."></textarea></label>
+    </div>
+  </template>
+
+  <template id="certificationsTemplate">
+    <div class="repeat-card" data-item>
+      <div class="repeat-head"><strong>Certification</strong><button class="remove-btn" data-remove>Remove</button></div>
+      <div class="form-grid">
+        <label>Certification name<input data-field="name" placeholder="AWS Certified Cloud Practitioner"></label>
+        <label>Issuer<input data-field="issuer" placeholder="Amazon Web Services"></label>
+        <label>Date<input data-field="date" placeholder="2026"></label>
+        <label>Credential URL<input data-field="link" placeholder="credential URL"></label>
+      </div>
+    </div>
+  </template>
+
+  <template id="languagesTemplate">
+    <div class="repeat-card" data-item>
+      <div class="repeat-head"><strong>Language</strong><button class="remove-btn" data-remove>Remove</button></div>
+      <div class="form-grid">
+        <label>Language<input data-field="name" placeholder="English"></label>
+        <label>Proficiency<select data-field="level"><option>Native</option><option>Fluent</option><option>Professional</option><option>Intermediate</option><option>Basic</option></select></label>
+      </div>
+    </div>
+  </template>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
